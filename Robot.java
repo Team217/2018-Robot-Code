@@ -118,7 +118,7 @@ public class Robot extends TimedRobot {
 		cross.addDefault("Cross", crossing);
 		cross.addObject("Do Not Cross", disableCrossing);
 		
-		System.out.println("you boofed");
+		System.out.println("you deployed");
 		try {
 			Measurements.saveToJSON();
 			readMeasurements();

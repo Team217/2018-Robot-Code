@@ -162,14 +162,14 @@ public class PIDnew {
 	}
 	
 	/*
-	 * Sets the given values as the minimum/maximum output values for which I will accumulate. Default values are +1/-1.
+	 * Sets the given values as the minimum/maximum output values for which I will accumulate. Default values are -1 and 1, respectively.
 	 * @param minimum The minimum output value
 	 * @param maximum The maximum output value
 	 * @exception IllegalArgumentException if minimum >= maximum
 	 */
 	public void setMinMax(double minimum, double maximum) {
 		if (minimum >= maximum) {
-			if (minimum > 0) {
+			if (minimum > 0 && maximum > 0) {
 				throw new IllegalArgumentException(
 						"Illegal Minimum Value:" + minimum + "\nValue must be less than the maximum");
 			}
@@ -210,7 +210,7 @@ public class PIDnew {
 	private void calcAccumulatedI() {
 		if (clock.millis() >= currentTime + delay) // Wait for [delay] milliseconds because we don't get new encoder values until then
 		{
-			if (P_Output < max || P_Output > min) {
+			if (P_Output < max && P_Output > min) {
 				calcError();
 				aI += currentError;
 				currentTime = clock.millis();

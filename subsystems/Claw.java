@@ -1,8 +1,6 @@
 package org.usfirst.frc.team217.robot.subsystems;
 
-import org.usfirst.frc.team217.robot.RobotMap;
-
-import org.usfirst.frc.team217.robot.WPI_TalonSRX;
+import org.usfirst.frc.team217.robot.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -18,11 +16,11 @@ public class Claw extends Subsystem {
 	// Put methods for controlling this subsystem
 	// here. Call these from Commands.
 
-	WPI_TalonSRX intakeFlip1 = RobotMap.intakeFlip;
-	WPI_VictorSPX leftIntake1 = RobotMap.leftIntake;
-	WPI_VictorSPX rightIntake1 = RobotMap.rightIntake;
-	DoubleSolenoid shortArm1 = RobotMap.shortArm;
-	DoubleSolenoid longArm1 = RobotMap.longArm;
+	WPI_TalonSRX intakeFlip = RobotMap.intakeFlip;
+	WPI_VictorSPX leftIntake = RobotMap.leftIntake;
+	WPI_VictorSPX rightIntake = RobotMap.rightIntake;
+	DoubleSolenoid shortArm = RobotMap.shortArm;
+	DoubleSolenoid longArm = RobotMap.longArm;
 	
 	/** The default command to run during initialization. */
 	public void initDefaultCommand() {
@@ -37,8 +35,8 @@ public class Claw extends Subsystem {
 	 *           The intake speed
 	 */
 	public void intake(double speed) {
-		leftIntake1.set(speed);
-		rightIntake1.set(speed);
+		leftIntake.set(speed);
+		rightIntake.set(speed);
 	}
 	
 	/**
@@ -48,25 +46,25 @@ public class Claw extends Subsystem {
 	 *           The speed of the intake flip
 	 */
 	public void armFlip(double speed) {
-		intakeFlip1.set(speed);
+		intakeFlip.set(speed);
 	}
 	
 	/** Sets the claw to the open state. */
 	public void openClaw() {
-		shortArm1.set(DoubleSolenoid.Value.kForward);
-		longArm1.set(DoubleSolenoid.Value.kForward);
+		shortArm.set(DoubleSolenoid.Value.kForward);
+		longArm.set(DoubleSolenoid.Value.kForward);
 	}
 	
 	/** Sets the claw to the default cube pickup state. */
 	public void defaultClaw() {
-		shortArm1.set(DoubleSolenoid.Value.kForward);
-		longArm1.set(DoubleSolenoid.Value.kReverse);
+		shortArm.set(DoubleSolenoid.Value.kForward);
+		longArm.set(DoubleSolenoid.Value.kReverse);
 	}
 	
 	/** Sets the claw to the closed (narrow cube) state. */
 	public void closeClaw() {
-		shortArm1.set(DoubleSolenoid.Value.kReverse);
-		longArm1.set(DoubleSolenoid.Value.kReverse);
+		shortArm.set(DoubleSolenoid.Value.kReverse);
+		longArm.set(DoubleSolenoid.Value.kReverse);
 	}
 
 }

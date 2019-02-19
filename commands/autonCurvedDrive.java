@@ -2,8 +2,7 @@ package org.usfirst.frc.team217.robot.commands;
 
 import java.util.TimerTask;
 
-import org.usfirst.frc.team217.robot.Robot;
-import org.usfirst.frc.team217.robot.RobotMap;
+import org.usfirst.frc.team217.robot.*;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -50,16 +49,7 @@ public class autonCurvedDrive extends Command {
 	 *        The D value for {@code PID}
 	 */
 	public autonCurvedDrive(double target1, double turnTarget1, double kP1, double kI1, double kD1) {
-		super("autonCurvedDrive");
-		requires(Robot.kDriveBase);
-		target = target1;
-		kP = kP1;
-		kI = kI1;
-		kD = kD1;
-		turnTarget = turnTarget1;
-		forward = (target > 0.0);
-		delayTime = 0;
-		timed = false;
+        this(target1, turnTarget1, 0, kP1, kI1, kD1);
 	}
 	
 	/**
@@ -104,13 +94,7 @@ public class autonCurvedDrive extends Command {
 	 *        The time, in seconds, that the bot should drive
 	 */
 	public autonCurvedDrive(double speed1, double turnTarget1, double timeout) {
-		super("autonCurvedDrive");
-		requires(Robot.kDriveBase);
-		speed = speed1;
-		turnTarget = turnTarget1;
-		delayTime = 0;
-		timed = true;
-		setTimeout(timeout);
+        this(speed1, turnTarget1, 0, timeout);
 	}
 	
 	/**

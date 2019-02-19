@@ -1,8 +1,6 @@
 package org.usfirst.frc.team217.robot.subsystems;
 
-import org.usfirst.frc.team217.robot.PID;
-import org.usfirst.frc.team217.robot.RobotMap;
-import org.usfirst.frc.team217.robot.WPI_TalonSRX;
+import org.usfirst.frc.team217.robot.*;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -17,14 +15,14 @@ public class Elevator extends Subsystem {
 	// Put methods for controlling this subsystem
 	// here. Call these from Commands.
 	
-	WPI_TalonSRX leftElevatorLift1 = RobotMap.leftElevatorLift;
-	WPI_TalonSRX rightElevatorLift1 = RobotMap.rightElevatorLift;
-	DigitalInput elevatorBottom1 = RobotMap.elevatorLimitSwitch;
+	WPI_TalonSRX leftElevatorLift = RobotMap.leftElevatorLift;
+	WPI_TalonSRX rightElevatorLift = RobotMap.rightElevatorLift;
+	DigitalInput elevatorBottom = RobotMap.elevatorLimitSwitch;
 	DigitalInput elevatorBottom2 = RobotMap.elevatorLimitSwitch2;
-	DigitalInput elevatorTop1 = RobotMap.elevatorTopLimit;
+	DigitalInput elevatorTop = RobotMap.elevatorTopLimit;
 
-	PID elevatorPID1 = RobotMap.elevatorPID;
-	PID elevatorMaintainPID1 = RobotMap.elevatorMaintainPID;
+	PID elevatorPID = RobotMap.elevatorPID;
+	PID elevatorMaintainPID = RobotMap.elevatorMaintainPID;
 
 	double elevatorSpeed = 0;
 	double lastEncoder = 0;
@@ -35,8 +33,8 @@ public class Elevator extends Subsystem {
 	
 	/** The default command to run during initialization. */
 	public void initDefaultCommand() {
-		rightElevatorLift1.setup();
-		leftElevatorLift1.setup();
+		rightElevatorLift.setup();
+		leftElevatorLift.setup();
 	}
 	
 	/**
@@ -46,13 +44,13 @@ public class Elevator extends Subsystem {
 	 *           The speed value currently being sent to the elevator motors
 	 */
 	public void elevatorLimitCheck(double speed) {
-		if ((!elevatorBottom1.get() || !elevatorBottom2.get()) && speed >= 0.0) {
+		if ((!elevatorBottom.get() || !elevatorBottom2.get()) && speed >= 0.0) {
 			elevatorSpeed = 0;
-			rightElevatorLift1.resetEncoder();
-			leftElevatorLift1.resetEncoder();
+			rightElevatorLift.resetEncoder();
+			leftElevatorLift.resetEncoder();
 			lastEncoder = 0;
 		}
-		else if(!elevatorTop1.get() && speed <= 0.0) { // TODO: !elevatorTop1.get() on the comp bot
+		else if(!elevatorTop.get() && speed <= 0.0) { // TODO: !elevatorTop.get() on the comp bot
 			elevatorSpeed = -0.085;
 		}
 	}
@@ -64,12 +62,12 @@ public class Elevator extends Subsystem {
 	 *           The desired elevator speed
 	 */
 	public void secondStageElevator(double speed) {
-		//elevatorMaintainPID1.setPID(0.0001417, 0.00000117, 0);
+		//elevatorMaintainPID.setPID(0.0001417, 0.00000117, 0);
 		
-		if (rightElevatorLift1.getEncoder() <= -31000 && speed <= 0) {
+		if (rightElevatorLift.getEncoder() <= -31000 && speed <= 0) {
 			elevatorMult = .35;
 		}
-		else if(rightElevatorLift1.getEncoder() >= -5000 && speed >= 0.0) {
+		else if(rightElevatorLift.getEncoder() >= -5000 && speed >= 0.0) {
 			elevatorMult = .25;
 		}
 		else {
@@ -77,21 +75,17 @@ public class Elevator extends Subsystem {
 		}
 		
 		if (speed != 0) {
-			lastEncoder = rightElevatorLift1.getEncoder();
+			lastEncoder = rightElevatorLift.getEncoder();
 			elevatorSpeed = speed;
 		}
 		else if (speed == 0) {
 			elevatorSpeed = -0.085;
 			elevatorMult = 1.0;
-
-//			System.out.println("PDP Port 5: " + RobotMap.pdp.getCurrent(5));
-//			System.out.println("PDP Port 6: " + RobotMap.pdp.getCurrent(6));
 		}
 		
 		elevatorLimitCheck(speed);
-		rightElevatorLift1.set(elevatorSpeed * elevatorMult);
-		leftElevatorLift1.set(elevatorSpeed * elevatorMult);
-//		System.out.println("Elevator Encoder: " + rightElevatorLift1.getEncoder());
+		rightElevatorLift.set(elevatorSpeed * elevatorMult);
+		leftElevatorLift.set(elevatorSpeed * elevatorMult);
 	}
 	
 	/**
@@ -109,11 +103,11 @@ public class Elevator extends Subsystem {
 	 *          The D value for {@code PID}
 	 */
 	public void autonSecondElevator(double target, boolean isUp, double kP, double kI, double kD) {
-		elevatorPID1.setPID(kP, kI, kD);
+		elevatorPID.setPID(kP, kI, kD);
 		
-		double position = rightElevatorLift1.getEncoder();
+		double position = rightElevatorLift.getEncoder();
 		
-		elevatorSpeed = elevatorPID1.getOutput(position, target);
+		elevatorSpeed = elevatorPID.getOutput(position, target);
 		elevatorMult = 1;
 		if(elevatorSpeed >= 1.0) {
 			elevatorSpeed = 1.0;
@@ -140,14 +134,12 @@ public class Elevator extends Subsystem {
 				elevatorPID_OnTarget = true;
 			}
 		}
-		if(rightElevatorLift1.getEncoder() >= -3000 && target >= 0.0) {
+		if(rightElevatorLift.getEncoder() >= -3000 && target >= 0.0) {
 			elevatorMult = .15;
 		}
 		
-		leftElevatorLift1.set(elevatorSpeed*elevatorMult);
-		rightElevatorLift1.set(elevatorSpeed*elevatorMult);
-		
-		//System.out.println("Position: " + position);
+		leftElevatorLift.set(elevatorSpeed*elevatorMult);
+		rightElevatorLift.set(elevatorSpeed*elevatorMult);
 	}
 
 }

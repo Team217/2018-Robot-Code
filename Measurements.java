@@ -1,27 +1,19 @@
 package org.usfirst.frc.team217.robot;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.simple.parser.*;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 
 /**
  * This class saves and reads field measurements to/from files on the roboRIO.
  * 
  * @author ThunderChickens 217
  */
-public class Measurements
-{	
+public class Measurements {	
 	public static final String wallToSwitch = "alliance_wall_to_switch"; // Used
 	public static final String switchToScale = "switch_to_scale"; // Used
 	public static final String wallToScale = "alliance_wall_to_scale"; // Used
@@ -66,15 +58,13 @@ public class Measurements
 	 * 
 	 * @throws IOException
 	 */
-	public static void saveToJSON() throws IOException
-	{
+	public static void saveToJSON() throws IOException {
 		Map<String, String> obj = new LinkedHashMap<String, String>();
 		
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		String formatted;
 		
-		if(redFile.createNewFile())
-		{
+		if(redFile.createNewFile()) {
 			// Red Side
 			obj.put(wallToSwitch, "140.0");
 			obj.put(switchToScale, "103.65");
@@ -113,8 +103,7 @@ public class Measurements
 		
 		obj.clear();
 		
-		if(blueFile.createNewFile())
-		{
+		if(blueFile.createNewFile()) {
 			// Blue Side
 			obj.put(wallToSwitch, "140.0");
 			obj.put(switchToScale, "103.65");
@@ -161,8 +150,7 @@ public class Measurements
 	 * @throws IOException
 	 * @throws ParseException
 	 */
-	public static HashMap<String, HashMap<String, Double>> getMeasurements() throws IOException, ParseException
-	{
+	public static HashMap<String, HashMap<String, Double>> getMeasurements() throws IOException, ParseException {
 		saveToJSON();
 		
 		JSONParser parseFile = new JSONParser();
@@ -173,16 +161,14 @@ public class Measurements
 		Object blueObject = parseFile.parse(new FileReader(blueFile));
 		JSONObject blueObj = (JSONObject) blueObject;
 		
-		while(redObj.size() != 26)
-		{
+		while(redObj.size() != 26) {
 			if(redFile.delete()) {
 				saveToJSON();
 				break;
 			}
 		}
 		
-		while(blueObj.size() != 26)
-		{
+		while(blueObj.size() != 26) {
 			if(blueFile.delete()) {
 				saveToJSON();
 				break;

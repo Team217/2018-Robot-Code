@@ -5,8 +5,7 @@ package org.usfirst.frc.team217.robot;
  * 
  * @author ThunderChickens 217
  */
-public class EncoderConverter
-{
+public class EncoderConverter {
 	
 	/**
 	 * Converts inches to encoder ticks.
@@ -18,8 +17,7 @@ public class EncoderConverter
 	 * @param ticksPerRev
 	 *            Number of encoder ticks per one revolution
 	 */
-	public static double inchToEnc(double inches, double diameter, double ticksPerRev)
-	{
+	public static double inchToEnc(double inches, double diameter, double ticksPerRev) {
 		double encTicks = inches / (Math.PI * diameter) * ticksPerRev;
 		
 		return encTicks;
@@ -35,8 +33,7 @@ public class EncoderConverter
 	 * @param ticksPerRev
 	 *            Number of encoder ticks per one revolution
 	 */
-	public static double encToInch(double encTicks, double diameter, double ticksPerRev)
-	{
+	public static double encToInch(double encTicks, double diameter, double ticksPerRev) {
 		double inches = encTicks / ticksPerRev * Math.PI * diameter;
 		
 		return inches;

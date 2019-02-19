@@ -1,9 +1,6 @@
 package org.usfirst.frc.team217.robot.subsystems;
 
-import org.usfirst.frc.team217.robot.PID;
-import org.usfirst.frc.team217.robot.PigeonIMU;
-import org.usfirst.frc.team217.robot.RobotMap;
-import org.usfirst.frc.team217.robot.WPI_TalonSRX;
+import org.usfirst.frc.team217.robot.*;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
@@ -19,18 +16,18 @@ public class DriveBase extends Subsystem {
 	// Put methods for controlling this subsystem
 	// here. Call these from Commands.
 
-	WPI_TalonSRX rightMaster1 = RobotMap.rightMaster;
-	WPI_VictorSPX rightMidSlave1 = RobotMap.rightMidSlave;
-	WPI_VictorSPX rightBackSlave1 = RobotMap.rightBackSlave;
-	WPI_TalonSRX leftMaster1 = RobotMap.leftMaster;
-	WPI_VictorSPX leftMidSlave1 = RobotMap.leftMidSlave;
-	WPI_VictorSPX leftBackSlave1 = RobotMap.leftBackSlave;
-	PigeonIMU pigeon1 = RobotMap.pigeon;
+	WPI_TalonSRX rightMaster = RobotMap.rightMaster;
+	WPI_VictorSPX rightMidSlave = RobotMap.rightMidSlave;
+	WPI_VictorSPX rightBackSlave = RobotMap.rightBackSlave;
+	WPI_TalonSRX leftMaster = RobotMap.leftMaster;
+	WPI_VictorSPX leftMidSlave = RobotMap.leftMidSlave;
+	WPI_VictorSPX leftBackSlave = RobotMap.leftBackSlave;
+	PigeonIMU pigeon = RobotMap.pigeon;
 	
 	double pigeonAngle = 0.0;
 
-	PID drivePID1 = RobotMap.drivePID;
-	PID turnPID1 = RobotMap.turnPID;
+	PID drivePID = RobotMap.drivePID;
+	PID turnPID = RobotMap.turnPID;
 	PID angleCorrectPID = new PID(0.01, 0.0, 0.0, 100);
 
 	public boolean drivePID_OnTarget = false;
@@ -42,13 +39,13 @@ public class DriveBase extends Subsystem {
 	public void initDefaultCommand() {
 		// Set the default command for a subsystem here.
 		// setDefaultCommand(new MySpecialCommand());
-		leftMaster1.setup();
-		rightMaster1.setup();
-		rightMidSlave1.follow(rightMaster1);
-		rightBackSlave1.follow(rightMaster1);
-		leftMidSlave1.follow(leftMaster1);
-		leftBackSlave1.follow(leftMaster1);
-		rightMaster1.resetEncoder();
+		leftMaster.setup();
+		rightMaster.setup();
+		rightMidSlave.follow(rightMaster);
+		rightBackSlave.follow(rightMaster);
+		leftMidSlave.follow(leftMaster);
+		leftBackSlave.follow(leftMaster);
+		rightMaster.resetEncoder();
 	}
 
 	/**
@@ -71,16 +68,16 @@ public class DriveBase extends Subsystem {
 			rightSpeed = antiTipSpeed[1];
 		}
 		
-		leftMaster1.set(leftSpeed);
-		rightMaster1.set(rightSpeed);
+		leftMaster.set(leftSpeed);
+		rightMaster.set(rightSpeed);
 	}
 	
 	protected double[] antiTip(double leftSpeed, double rightSpeed) {
-		if(pigeon1.getPitch() >= 12.0) {
+		if(pigeon.getPitch() >= 12.0) {
 			leftSpeed = -0.5;
 			rightSpeed = 0.5;
 		}
-		else if(pigeon1.getPitch() <= -12.0) {
+		else if(pigeon.getPitch() <= -12.0) {
 			leftSpeed = 0.5;
 			rightSpeed = -0.5;
 		}
@@ -129,14 +126,9 @@ public class DriveBase extends Subsystem {
 				leftSpeed *= (1.0 - angleCorrect);
 			}
 		}
-
-		//			System.out.println("Original Angle" + originalAngle);
-		//			System.out.println("Left Speed: " + leftSpeed);
-		//			System.out.println("Right Speed: " + rightSpeed);
-		//			System.out.println("Angle Correction: " + (1.0 - angleCorrect));
 		
-		leftMaster1.set(leftSpeed);
-		rightMaster1.set(rightSpeed);
+		leftMaster.set(leftSpeed);
+		rightMaster.set(rightSpeed);
 	}
 	
 	/**
@@ -156,12 +148,12 @@ public class DriveBase extends Subsystem {
 	public void driveForward(double target, double kP, double kI, double kD, boolean turnCorrection) {
 		
 		// Drive speed calculation
-		drivePID1.setPID(kP, kI, kD);
+		drivePID.setPID(kP, kI, kD);
 		
-		double position = -rightMaster1.getEncoder(); // Target is positive, so encoder needs to be positive, but defaults to negative
+		double position = -rightMaster.getEncoder(); // Target is positive, so encoder needs to be positive, but defaults to negative
 		
-		double leftSpeed = drivePID1.getOutput(position, target);
-		double rightSpeed = drivePID1.getOutput(position, target);
+		double leftSpeed = drivePID.getOutput(position, target);
+		double rightSpeed = drivePID.getOutput(position, target);
 		
 		if(leftSpeed > 1.0)
 		{
@@ -198,11 +190,6 @@ public class DriveBase extends Subsystem {
 			else if(angleError < 0.0) {
 				rightSpeed *= (1.0 - angleCorrect);
 			}
-			
-//			System.out.println("Original Angle" + originalAngle);
-//			System.out.println("Left Speed: " + leftSpeed);
-//			System.out.println("Right Speed: " + rightSpeed);
-//			System.out.println("Angle Correction: " + (1.0 - angleCorrect));
 		}
 		
 		// Finished Check
@@ -214,8 +201,8 @@ public class DriveBase extends Subsystem {
 			drivePID_OnTarget = true;
 		}
 		
-		leftMaster1.set(leftSpeed);
-		rightMaster1.set(-rightSpeed);
+		leftMaster.set(leftSpeed);
+		rightMaster.set(-rightSpeed);
 	}
 
 	/**
@@ -235,12 +222,12 @@ public class DriveBase extends Subsystem {
 	public void driveBackward(double target, double kP, double kI, double kD, boolean turnCorrection) {
 		
 		// Drive speed calculation
-		drivePID1.setPID(kP, kI, kD);
+		drivePID.setPID(kP, kI, kD);
 
-		double position = -rightMaster1.getEncoder(); // Target is positive, so encoder needs to be positive, but defaults to negative
+		double position = -rightMaster.getEncoder(); // Target is positive, so encoder needs to be positive, but defaults to negative
 		
-		double leftSpeed = drivePID1.getOutput(position, target);
-		double rightSpeed = drivePID1.getOutput(position, target);
+		double leftSpeed = drivePID.getOutput(position, target);
+		double rightSpeed = drivePID.getOutput(position, target);
 		
 		if(leftSpeed > 1.0)
 		{
@@ -288,8 +275,8 @@ public class DriveBase extends Subsystem {
 			drivePID_OnTarget = true;
 		}
 		
-		leftMaster1.set(leftSpeed);
-		rightMaster1.set(-rightSpeed);
+		leftMaster.set(leftSpeed);
+		rightMaster.set(-rightSpeed);
 	}
 	
 	/**
@@ -307,10 +294,10 @@ public class DriveBase extends Subsystem {
 	 *          The D value for {@code PID}
 	 */
 	public void autonTurn(double turnAngle, double kP, double kI, double kD) {
-		turnPID1.setPID(kP, kI, kD);
-		pigeonAngle = pigeon1.getAngle();
+		turnPID.setPID(kP, kI, kD);
+		pigeonAngle = pigeon.getAngle();
 		
-		double speed = turnPID1.getOutput(pigeonAngle, turnAngle);
+		double speed = turnPID.getOutput(pigeonAngle, turnAngle);
 		
 		turnPID_OnTarget = false;
 		
@@ -319,7 +306,7 @@ public class DriveBase extends Subsystem {
 			turnPID_OnTarget = true;
 		}
 		
-		leftMaster1.set(speed);
-		rightMaster1.set(speed);
+		leftMaster.set(speed);
+		rightMaster.set(speed);
 	}
 }

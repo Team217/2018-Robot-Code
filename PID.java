@@ -7,8 +7,7 @@ import java.time.Clock;
  * 
  * @author ThunderChickens 217
  */
-public class PID
-{
+public class PID {
 	// Made private because of getValue() functions
 	private double kP = 0;
 	private double kI = 0;
@@ -40,8 +39,7 @@ public class PID
 	 *  @exception IllegalArgumentException
 	 *           if the newP, newI, or newD value is negative
 	 */
-	public PID(double newP, double newI, double newD, int timeout)
-	{
+	public PID(double newP, double newI, double newD, int timeout) {
 		setP(newP);
 		setI(newI);
 		setD(newD);
@@ -60,8 +58,7 @@ public class PID
 	 * @exception IllegalArgumentException
 	 *           if the newP, newI, or newD value is negative
 	 */
-	public PID(double newP, double newI, int timeout)
-	{
+	public PID(double newP, double newI, int timeout) {
 		setP(newP);
 		setI(newI);
 		delay = timeout;
@@ -75,14 +72,11 @@ public class PID
 	 * @exception IllegalArgumentException
 	 *          if newP is negative
 	 */
-	private void setP(double newP)
-	{
-		if(newP < 0)
-		{
+	private void setP(double newP) {
+		if(newP < 0) {
 			throw new IllegalArgumentException("Illegal kP Value: " + newP + "\nValue cannot be negative");
-		}
-		else
-		{
+        }
+        else {
 			kP = newP;
 		}
 	}
@@ -95,14 +89,11 @@ public class PID
 	 * @exception IllegalArgumentException
 	 *          if newI is negative
 	 */
-	private void setI(double newI)
-	{
-		if(newI < 0)
-		{
+	private void setI(double newI) {
+		if(newI < 0) {
 			throw new IllegalArgumentException("Illegal kI Value: " + newI + "\nValue cannot be negative");
 		}
-		else
-		{
+		else {
 			kI = newI;
 		}
 	}
@@ -115,14 +106,11 @@ public class PID
 	 * @exception IllegalArgumentException
 	 *          if newD is negative
 	 */
-	private void setD(double newD)
-	{
-		if(newD < 0)
-		{
+	private void setD(double newD) {
+		if(newD < 0) {
 			throw new IllegalArgumentException("Illegal kD Value: " + newD + "\nValue cannot be negative");
 		}
-		else
-		{
+		else {
 			kD = newD;
 		}
 	}
@@ -139,8 +127,7 @@ public class PID
 	 * @exception IllegalArgumentException
 	 *          if newP, newI, or newD is negative
 	 */
-	public void setPID(double newP, double newI, double newD)
-	{
+	public void setPID(double newP, double newI, double newD) {
 		setP(newP);
 		setI(newI);
 		setD(newD);
@@ -157,8 +144,7 @@ public class PID
 	 * @exception IllegalArgumentException
 	 *          if newP or newI is negative
 	 */
-	public void setPID(double newP, double newI)
-	{
+	public void setPID(double newP, double newI) {
 		setP(newP);
 		setI(newI);
 		setD(0);
@@ -171,35 +157,29 @@ public class PID
 	 * @param timeout
 	 *             The time to wait before updating I or D, in milliseconds
 	 */
-	public void setTimeout(int timeout)
-	{
+	public void setTimeout(int timeout) {
 		delay = timeout;
 	}
 	
 	/** Calculates the current error. */
-	private void calcError()
-	{
+	private void calcError() {
 		currentError = target - position;
 	}
 	
 	/** Calculates the Proportional output. */
-	private void calcP_Output()
-	{
+	private void calcP_Output() {
 		P_Output = kP * currentError;
 	}
 	
 	/** Calculates the Integral output. */
-	private void calcI_Output()
-	{
+	private void calcI_Output() {
 		I_Output = (kI * currentError) + aI;
 		calcAccumulatedI();
 	}
 	
 	/** Calculates the Accumulated Integral output for use by the I Output calculation. */
-	private void calcAccumulatedI()
-	{
-		if(clock.millis() >= currentTime + delay) // Wait for [delay] milliseconds because we don't get new encoder values until then
-		{
+	private void calcAccumulatedI() {
+		if(clock.millis() >= currentTime + delay) { // Wait for [delay] milliseconds because we don't get new encoder values until then
 			calcError();
 			aI += kI * currentError;
 			currentTime = clock.millis();
@@ -207,80 +187,68 @@ public class PID
 	}
 	
 	/** Calculates the Derivative output. */
-	private void calcD_Output()
-	{
+	private void calcD_Output() {
 		D_Output = kD * (currentError - lastError);
 		updateError();
 	}
 	
 	/** Returns the P output value. */
-	private double getP_Output()
-	{
+	private double getP_Output() {
 		calcP_Output();
 		return P_Output;
 	}
 	
 	/** Returns the I output value. */
-	private double getI_Output()
-	{
+	private double getI_Output() {
 		calcI_Output();
 		return I_Output;
 	}
 	
 	/** Returns the D output value. */
-	private double getD_Output()
-	{
+	private double getD_Output() {
 		calcD_Output();
 		return D_Output;
 	}
 	
 	/** Returns the current target. */
-	public double getTarget()
-	{
+	public double getTarget() {
 		return target;
 	}
 	
 	/** Returns the current position. */
-	public double getPosition()
-	{
+	public double getPosition() {
 		return position;
 	}
 	
 	/** Returns the current kP value. */
-	public double getP()
-	{
+	public double getP() {
 		return kP;
 	}
 	
 	/** Returns the current kI value. */
-	public double getI()
-	{
+	public double getI() {
 		return kI;
 	}
 	
 	/** Returns the current kD value. */
-	public double getD()
-	{
+	public double getD() {
 		return kD;
 	}
 	
 	/** Returns the current error. */
-	public double getCurrentError()
-	{
+	public double getCurrentError() {
 		calcError();
 		return currentError;
 	}
 	
 	/** Returns the previous error. */
-	public double getLastError()
-	{
+	public double getLastError() {
 		updateError();
 		return lastError;
 	}
 	
 	/** Returns the Accumulated I Output value. */
-	public double getAccumulatedI()
-	{
+	public double getAccumulatedI() {
 		calcAccumulatedI();
 		return aI;
 	}
@@ -293,8 +261,7 @@ public class PID
 	 * @param tar
 	 *         The desired target
 	 */
-	public double getOutput(double pos, double tar)
-	{
+	public double getOutput(double pos, double tar) {
 		target = tar;
 		position = pos;
 		calcError();
@@ -303,25 +270,21 @@ public class PID
 	}
 	
 	/** Updates the error and last error values. */
-	private void updateError()
-	{
-		if(clock.millis() >= currentTime + delay) // Wait for [delay] milliseconds before updating the last error
-		{
+	private void updateError(){
+		if(clock.millis() >= currentTime + delay) { // Wait for [delay] milliseconds before updating the last error
 			calcError();
 			lastError = currentError;
 		}
 	}
 	
 	/** Resets kP, kI, and kD to 0. */
-	public void resetPID()
-	{
+	public void resetPID() {
 		setPID(0.0, 0.0, 0.0);
 		resetError();
 	}
 	
 	/** Resets the accumulated I value and the last error value. */
-	public void resetError()
-	{
+	public void resetError() {
 		aI = 0;
 		lastError = 0;
 	}

@@ -8,8 +8,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
  * 
  * @author ThunderChickens 217, Cross the Road Electronics
  */
-public class WPI_TalonSRX extends com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX
-{
+public class WPI_TalonSRX extends com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX {
 	
 	/**
 	 * Constructor for creating a {@code TalonSRX} motor controller for FRC.
@@ -17,8 +16,7 @@ public class WPI_TalonSRX extends com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX
 	 * @param deviceNumber
 	 *                  The Device ID of the motor controller
 	 */
-	public WPI_TalonSRX(int deviceNumber)
-	{
+	public WPI_TalonSRX(int deviceNumber) {
 		super(deviceNumber);
 	}
 	
@@ -27,58 +25,35 @@ public class WPI_TalonSRX extends com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX
 	 * 
 	 * @return error code
 	 */
-	public ErrorCode resetEncoder()
-	{
+	public ErrorCode resetEncoder() {
 		return getSensorCollection().setQuadraturePosition(0, 0);
 	}
 	
 	/** Returns the Quadrature Encoder position. */
-	public int getEncoder()
-	{
+	public int getEncoder() {
 		return getSensorCollection().getQuadraturePosition();
 	}
 	
 	/** Returns the Analog Encoder position. */
-	public int getAnalogEnc()
-	{
+	public int getAnalogEnc() {
 		return getSensorCollection().getAnalogIn();
 	}
 	
 	/** Returns '1' iff forward limit switch is closed, 0 iff switch is open. This function works regardless if limit switch feature is enabled. */
-	public boolean getLimitFwd()
-	{
+	public boolean getLimitFwd() {
 		return getSensorCollection().isFwdLimitSwitchClosed();
 	}
 	
 	/** Returns '1' iff reverse limit switch is closed, 0 iff switch is open. This function works regardless if limit switch feature is enabled. */
-	public boolean getLimitRev()
-	{
+	public boolean getLimitRev() {
 		return getSensorCollection().isRevLimitSwitchClosed();
 	}
 	
-	/**
-	 * Sets up the motor controller to have a current limit and use a Quadrature Encoder.
-	 * 
-	 * @param currentLimit
-	 *                  The current limit of the motor controller
-	 */
-	public void setup(int currentLimit)
-	{
-		set(0);
-		configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
-		resetEncoder();
-//		enableCurrentLimit(true);
-//		configContinuousCurrentLimit(currentLimit, 0);
-	}
-	
 	/** Sets up the motor controller to have a current limit of 40 and use a Quadrature Encoder. */
-	public void setup()
-	{
+	public void setup() {
 		set(0);
 		configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		resetEncoder();
-//		enableCurrentLimit(true);
-//		configContinuousCurrentLimit(40, 0);
 	}
 
 }

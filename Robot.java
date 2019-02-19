@@ -8,30 +8,17 @@
 package org.usfirst.frc.team217.robot;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 import org.json.simple.parser.ParseException;
-import org.usfirst.frc.team217.robot.commands.CenterSwitchAuton;
-import org.usfirst.frc.team217.robot.commands.CrossTheRoadAuton;
-import org.usfirst.frc.team217.robot.commands.OppositeSideDoubleScaleAuton;
-import org.usfirst.frc.team217.robot.commands.SameSideScaleAuton;
-import org.usfirst.frc.team217.robot.commands.SameSideSwitchAuton;
-import org.usfirst.frc.team217.robot.commands.TeleopCommands;
-import org.usfirst.frc.team217.robot.commands.TripleScaleAuton;
-import org.usfirst.frc.team217.robot.subsystems.Claw;
-import org.usfirst.frc.team217.robot.subsystems.Climber;
-import org.usfirst.frc.team217.robot.subsystems.DriveBase;
-import org.usfirst.frc.team217.robot.subsystems.Elevator;
+import org.usfirst.frc.team217.robot.commands.*;
+import org.usfirst.frc.team217.robot.subsystems.*;
 
 import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.*;
 
 //import org.usfirst.frc.team217.robot.commands.ExampleCommand;
 //import org.usfirst.frc.team217.robot.subsystems.ExampleSubsystem;

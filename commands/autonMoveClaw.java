@@ -1,6 +1,6 @@
 package org.usfirst.frc.team217.robot.commands;
 
-import org.usfirst.frc.team217.robot.Robot;
+import org.usfirst.frc.team217.robot.*;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -20,11 +20,7 @@ public class autonMoveClaw extends Command {
 	 *             The time, in seconds, the claw should spend flipping down
 	 */
 	public autonMoveClaw(double timeout) {
-		super("autonMoveClaw");
-        requires(Robot.kClaw);
-		
-		flipSpeed = 0.5;
-    	setTimeout(timeout);
+		this(0.5, timeout);
     }
 	
 	/**
@@ -38,8 +34,6 @@ public class autonMoveClaw extends Command {
     public autonMoveClaw(double speed, double timeout) {
 		super("autonMoveClaw");
         requires(Robot.kClaw);
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
     	
     	flipSpeed = speed;
     	setTimeout(timeout);

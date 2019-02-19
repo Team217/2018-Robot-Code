@@ -1,7 +1,6 @@
 package org.usfirst.frc.team217.robot.commands;
 
-import org.usfirst.frc.team217.robot.Robot;
-import org.usfirst.frc.team217.robot.RobotMap;
+import org.usfirst.frc.team217.robot.*;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -29,16 +28,18 @@ public class teleopClawFlip extends Command {
 				Robot.kClaw.armFlip(-.75);
 			}
 			else {
-			Robot.kClaw.armFlip(-1);
+			    Robot.kClaw.armFlip(-1);
 			}
-		} else if (Robot.m_oi.leftTriggerOper.get()) {
+        }
+        else if (Robot.m_oi.leftTriggerOper.get()) {
 			if(RobotMap.rightElevatorLift.getEncoder() < -5000) {
 				Robot.kClaw.armFlip(.45);
 			}
 			else {
-			Robot.kClaw.armFlip(.75);
+			    Robot.kClaw.armFlip(.75);
 			}
-		} else {
+        }
+        else {
 			Robot.kClaw.armFlip(0);
 		}
 	}

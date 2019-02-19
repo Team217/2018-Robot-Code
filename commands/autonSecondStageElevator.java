@@ -2,8 +2,7 @@ package org.usfirst.frc.team217.robot.commands;
 
 import java.util.TimerTask;
 
-import org.usfirst.frc.team217.robot.Robot;
-import org.usfirst.frc.team217.robot.RobotMap;
+import org.usfirst.frc.team217.robot.*;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -44,14 +43,7 @@ public class autonSecondStageElevator extends Command {
 	 *          The D value for {@code PID}
 	 */
 	public autonSecondStageElevator(double target1, double kP1, double kI1, double kD1) {
-		super("autonSecondStageElevator");
-		requires(Robot.kElevator);
-		target = target1;
-		kP = kP1;
-		kI = kI1;
-		kD = kD1;
-		readOnly = false;
-		delayFinished = true;
+		this(target1, kP1, kI1, kD1, 1.0);
 	}
 	
 	public autonSecondStageElevator(double target1, double kP1, double kI1, double kD1, double mult) {
@@ -81,14 +73,7 @@ public class autonSecondStageElevator extends Command {
 	 *          The D value for {@code PID}
 	 */
 	public autonSecondStageElevator(double target1, long delay1, double kP1, double kI1, double kD1) {
-		super("autonSecondStageElevator");
-		requires(Robot.kElevator);
-		target = target1;
-		kP = kP1;
-		kI = kI1;
-		kD = kD1;
-		readOnly = false;
-		delayFinished = false;
+		this(target1, kP1, kI1, kD1);
 		delayTime = delay1;
 	}
 	

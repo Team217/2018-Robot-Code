@@ -1,7 +1,6 @@
 package org.usfirst.frc.team217.robot.commands;
 
-import org.usfirst.frc.team217.robot.Robot;
-import org.usfirst.frc.team217.robot.RobotMap;
+import org.usfirst.frc.team217.robot.*;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -55,12 +54,7 @@ public class autonTurn extends Command {
 	 *          The command timeout, in seconds
 	 */
     public autonTurn(double turnAngle1, double kP1, double kI1, double kD1, double timeout) {
-    	super("autonTurn");
-    	requires(Robot.kDriveBase);
-		turnAngle = turnAngle1;
-		kP = kP1;
-		kI = kI1;
-		kD = kD1;
+    	this(turnAngle1, kP1, kI1, kD1);
 		setTimeout(timeout);
     }
 

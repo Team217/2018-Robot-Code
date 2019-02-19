@@ -85,51 +85,6 @@ public class DriveBase extends Subsystem {
 		double[] speed = {leftSpeed, rightSpeed};
 		return speed;
 	}
-
-	/**
-	 * Drives the robot at the given forward and turn speeds.
-	 * 
-	 * @param speed
-	 *           The forward/reverse drive speed
-	 * @param turn
-	 *           The turn drive speed
-	 * @param antiTipOn
-	 *           {@code true} if antitip should be enabled. Automatically disables if bot is in climb mode
-	 */
-	public void driveStraight(double speed, double turn) {
-		double leftSpeed = speed + turn;
-		double rightSpeed = -speed + turn;
-
-		// Bot turning correction using the pigeon
-		double angle = RobotMap.pigeon.getAngle();
-		double angleError = angle - originalAngle;
-		double angleCorrect = Math.abs(angleCorrectPID.getOutput(angle, originalAngle));
-
-		if(angleCorrect > 1.0)
-		{
-			angleCorrect = 1.0;
-		}
-
-		if(speed > 0.0) {
-			if(angleError > 0.0) {
-				leftSpeed *= (1.0 - angleCorrect);
-			}
-			else if(angleError < 0.0) {
-				rightSpeed *= (1.0 - angleCorrect);
-			}
-		}
-		else {
-			if(angleError > 0.0) {
-				rightSpeed *= (1.0 - angleCorrect);
-			}
-			else if(angleError < 0.0) {
-				leftSpeed *= (1.0 - angleCorrect);
-			}
-		}
-		
-		leftMaster.set(leftSpeed);
-		rightMaster.set(rightSpeed);
-	}
 	
 	/**
 	 * Drives the bot forward to a certain encoder position using {@code PID}.
@@ -152,45 +107,23 @@ public class DriveBase extends Subsystem {
 		
 		double position = -rightMaster.getEncoder(); // Target is positive, so encoder needs to be positive, but defaults to negative
 		
-		double leftSpeed = drivePID.getOutput(position, target);
-		double rightSpeed = drivePID.getOutput(position, target);
-		
-		if(leftSpeed > 1.0)
-		{
-			leftSpeed = 1.0;
-		}
-		else if(leftSpeed < -1.0)
-		{
-			leftSpeed = -1.0;
-		}
-		
-		if(rightSpeed > 1.0)
-		{
-			rightSpeed = 1.0;
-		}
-		else if(rightSpeed < -1.0)
-		{
-			rightSpeed = -1.0;
-		}
-		
-		if(turnCorrection) {
-			// Bot turning correction using the pigeon
+        double speed = drivePID.getOutput(position, target);
+        double turn = 0;
+
+        if(turnCorrection) {
 			double angle = RobotMap.pigeon.getAngle();
-			double angleError = angle - originalAngle;
-			double angleCorrect = Math.abs(angleCorrectPID.getOutput(angle, originalAngle));
+            double angleCorrect = 0.5 * angleCorrectPID.getOutput(angle, originalAngle);
 			
-			if(angleCorrect > 1.0)
-			{
-				angleCorrect = 1.0;
-			}
-			
-			if(angleError > 0.0) {
-				leftSpeed *= (1.0 - angleCorrect);
-			}
-			else if(angleError < 0.0) {
-				rightSpeed *= (1.0 - angleCorrect);
-			}
-		}
+			if(angleCorrect > 0.5) {
+				angleCorrect = 0.5;
+            }
+            else if(angleCorrect < -0.5) {
+                angleCorrect = -0.5;
+            }
+
+            turn = angleCorrect * Math.abs(speed);
+            speed *= (1 - Math.abs(angleCorrect));
+        }
 		
 		// Finished Check
 		drivePID_OnTarget = false;
@@ -226,45 +159,26 @@ public class DriveBase extends Subsystem {
 
 		double position = -rightMaster.getEncoder(); // Target is positive, so encoder needs to be positive, but defaults to negative
 		
-		double leftSpeed = drivePID.getOutput(position, target);
-		double rightSpeed = drivePID.getOutput(position, target);
-		
-		if(leftSpeed > 1.0)
-		{
-			leftSpeed = 1.0;
-		}
-		else if(leftSpeed < -1.0)
-		{
-			leftSpeed = -1.0;
-		}
-		
-		if(rightSpeed > 1.0)
-		{
-			rightSpeed = 1.0;
-		}
-		else if(rightSpeed < -1.0)
-		{
-			rightSpeed = -1.0;
-		}
-		
-		if(turnCorrection) {
-			// Bot turning correction using the pigeon
+		//double leftSpeed = drivePID.getOutput(position, target);
+        //double rightSpeed = drivePID.getOutput(position, target);
+        
+        double speed = drivePID.getOutput(position, target);
+        double turn = 0;
+
+        if(turnCorrection) {
 			double angle = RobotMap.pigeon.getAngle();
-			double angleError = angle - originalAngle;
-			double angleCorrect = Math.abs(angleCorrectPID.getOutput(angle, originalAngle));
+            double angleCorrect = 0.5 * angleCorrectPID.getOutput(angle, originalAngle);
 			
-			if(angleCorrect > 1.0)
-			{
-				angleCorrect = 1.0;
-			}
-			
-			if(angleError > 0.0) {
-				rightSpeed *= (angleCorrect - 1.0);
-			}
-			else if(angleError < 0.0) {
-				leftSpeed *= (angleCorrect - 1.0);
-			}
-		}
+			if(angleCorrect > 0.5) {
+				angleCorrect = 0.5;
+            }
+            else if(angleCorrect < -0.5) {
+                angleCorrect = -0.5;
+            }
+
+            turn = angleCorrect * Math.abs(speed);
+            speed *= (1 - Math.abs(angleCorrect));
+        }
 		
 		// Finished Check
 		drivePID_OnTarget = false;
@@ -275,8 +189,8 @@ public class DriveBase extends Subsystem {
 			drivePID_OnTarget = true;
 		}
 		
-		leftMaster.set(leftSpeed);
-		rightMaster.set(-rightSpeed);
+		leftMaster.set(speed + turn);
+		rightMaster.set(-speed + turn);
 	}
 	
 	/**

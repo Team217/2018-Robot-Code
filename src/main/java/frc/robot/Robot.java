@@ -11,7 +11,8 @@ import java.io.IOException;
 import java.util.*;
 
 import org.json.simple.parser.ParseException;
-import frc.robot.commands.*;
+
+import frc.robot.commandgroups.*;
 import frc.robot.subsystems.*;
 
 import edu.wpi.cscore.UsbCamera;
@@ -370,7 +371,7 @@ public class Robot extends TimedRobot {
 		
 		RobotMap.pigeon.reset();
 		
-		teleopCommand = new TeleopCommands();
+		teleopCommand = new TeleopGroup();
 		if (teleopCommand != null) {
 			teleopCommand.start();
 			System.out.println("went in if");
